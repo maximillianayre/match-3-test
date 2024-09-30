@@ -18,6 +18,7 @@ class Grid
     }
 
     public int[,] GetState() => state;
+    public GridConfig GetConfig() => config;
 
     private bool GetIsInBounds(int row, int column)
     {
