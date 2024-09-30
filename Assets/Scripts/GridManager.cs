@@ -17,6 +17,14 @@ public class GridManager : MonoBehaviour
     public GameObject tilePrefab;
     public GameObject gemPrefab;
 
+    public Button skinButton;
+    public Button gridButton;
+    public Button difficultyButton;
+
+    public TextMeshProUGUI difficultyLabel;
+    public TextMeshProUGUI skinLabel;
+
+
     private Grid activeGrid;
     private int activeSkinIndex;
     private int activeConfigIndex;
@@ -24,15 +32,16 @@ public class GridManager : MonoBehaviour
     private GameObject[,] tileObjects;
     private GameObject[,] gemObjects;
 
-    public Button skinButton;
-    public Button gridButton;
-    public Button difficultyButton;
-
-    public TextMeshProUGUI difficultyLabel;
+    private float singleTileOrthoSize;
+    private const float VIEWPORT_RECT_H= 0.8f;
 
     // Start is called before the first frame update
     void Start()
     {
+        var orthoSizeX = tilePrefab.GetComponent<SpriteRenderer>().bounds.size.x * Screen.height / Screen.width * 0.5f;
+        var orthoSizeY = tilePrefab.GetComponent<SpriteRenderer>().bounds.size.y * 0.5f * VIEWPORT_RECT_H;
+        singleTileOrthoSize = Math.Max(orthoSizeX, orthoSizeY);
+
         skinButton.onClick.AddListener(CycleSkin);
         gridButton.onClick.AddListener(RefreshGrid);
         difficultyButton.onClick.AddListener(CycleConfig);
@@ -106,8 +115,12 @@ public class GridManager : MonoBehaviour
         tileObjects = new GameObject[rows, columns];
         gemObjects = new GameObject[rows, columns];
 
-        var totalWidth = gridXSpacing * columns;
-        var totalHeight = gridYSpacing * rows;
+        var totalWidth = gridXSpacing * (columns - 1);
+        var totalHeight = gridYSpacing * (rows - 1);
+
+        // Rescale the camera to fit the entire grid
+        Camera.main.orthographicSize = singleTileOrthoSize * columns;
+
         for(int row = 0; row < rows; row++)
         {
             for(int column = 0; column < columns; column++)
@@ -125,6 +138,8 @@ public class GridManager : MonoBehaviour
         var columns = activeGrid.GetConfig().columns;
         var state = activeGrid.GetState();
         var activeSkin = skins[activeSkinIndex];
+
+        skinLabel.text = activeSkin.name;
 
         for (int row = 0; row < rows; row++)
         {
