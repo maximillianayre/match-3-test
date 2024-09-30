@@ -167,7 +167,7 @@ class Grid
         return valuesThatCouldSolve.Distinct().ToList();
     }
 
-    private void Generate()
+    public void Generate()
     {
         state = new int[config.rows, config.columns];
 

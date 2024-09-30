@@ -3,32 +3,100 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class GridManager : MonoBehaviour
 {
     public float gridXSpacing = 5f;
     public float gridYSpacing = 5f;
 
-    public GridConfig defaultConfig;
-    public GemSkin defaultSkin;
+    public GridConfig[] configs;
+    public GemSkin[] skins;
 
     public GameObject tilePrefab;
     public GameObject gemPrefab;
 
     private Grid activeGrid;
-    private GemSkin activeSkin;
+    private int activeSkinIndex;
+    private int activeConfigIndex;
 
     private GameObject[,] tileObjects;
     private GameObject[,] gemObjects;
 
+    public Button skinButton;
+    public Button gridButton;
+    public Button difficultyButton;
+
+    public TextMeshProUGUI difficultyLabel;
+
     // Start is called before the first frame update
     void Start()
     {
-        activeSkin = defaultSkin;
-        activeGrid = new Grid(defaultConfig);
-        var state = activeGrid.GetState();
+        skinButton.onClick.AddListener(CycleSkin);
+        gridButton.onClick.AddListener(RefreshGrid);
+        difficultyButton.onClick.AddListener(CycleConfig);
+
+        activeSkinIndex = 0;
+        activeConfigIndex = 0;
+
+        Teardown();
+        SetupGrid();
+    }
+
+    void CycleSkin()
+    {
+        activeSkinIndex++;
+        if (activeSkinIndex >= skins.Length)
+            activeSkinIndex = 0;
+
+        UpdateGems();
+    }
+
+    void RefreshGrid()
+    {
+        activeGrid.Generate();
+        UpdateGems();
+    }
+
+    void SetupGrid()
+    {
+        difficultyLabel.text = configs[activeConfigIndex].name;
+        activeGrid = new Grid(configs[activeConfigIndex]);
         CreateGrid();
         UpdateGems();
+    }
+
+    void CycleConfig()
+    {
+        activeConfigIndex++;
+        if (activeConfigIndex >= configs.Length)
+            activeConfigIndex = 0;
+
+        Teardown();
+        SetupGrid();
+    }
+
+    void Teardown()
+    {
+        if(tileObjects != null)
+        {
+            foreach(var tile in tileObjects)
+            {
+                GameObject.Destroy(tile);
+            }
+            tileObjects = null;
+        }
+
+        if(gemObjects != null)
+        {
+            foreach (var gem in gemObjects)
+            {
+                GameObject.Destroy(gem);
+            }
+            gemObjects = null;
+
+        }
     }
 
     void CreateGrid()
@@ -56,6 +124,7 @@ public class GridManager : MonoBehaviour
         var rows = activeGrid.GetConfig().rows;
         var columns = activeGrid.GetConfig().columns;
         var state = activeGrid.GetState();
+        var activeSkin = skins[activeSkinIndex];
 
         for (int row = 0; row < rows; row++)
         {
@@ -70,6 +139,8 @@ public class GridManager : MonoBehaviour
             }
         }
     }
+
+
 
     // Update is called once per frame
     void Update()
