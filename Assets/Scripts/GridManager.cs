@@ -14,7 +14,17 @@ public class GridManager : MonoBehaviour
     void Start()
     {
         activeGrid = new Grid(defaultConfig);
-        Debug.Log(String.Join(" ", activeGrid.GetState().Cast<int>()));
+        var state = activeGrid.GetState();
+
+        for (int i = 0; i < state.GetLength(0); i++)
+        {
+            string currRow = "";
+            for (int j = 0; j < state.GetLength(1); j++)
+            {
+                currRow += state[i, j] + " ";
+            }
+            Debug.Log(currRow + "\t");
+        }
     }
 
     // Update is called once per frame
