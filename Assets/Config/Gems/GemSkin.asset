@@ -12,4 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a137bbf3b64a009449c2c0f4e86eb28a, type: 3}
   m_Name: GemSkin
   m_EditorClassIdentifier: 
-  sprites: []
+  sprites:
+  - {fileID: 21300000, guid: 7d1576126cf335c4e9d6090a778798a1, type: 3}
+  - {fileID: 21300000, guid: 40d4dfbb798877049aa83457868ec6ba, type: 3}
+  - {fileID: 21300000, guid: a71b514d83922464cadb078e1c74b73c, type: 3}
+  - {fileID: 21300000, guid: f216b0028b652ef44bb7a2b3db59ba56, type: 3}
+  - {fileID: 21300000, guid: d34a3e01f8b9e66458dd835f680a4f24, type: 3}
+  - {fileID: 21300000, guid: 9f71a37822d27634fbb1763ccb0c3e9c, type: 3}
+  - {fileID: 21300000, guid: 09c753ee38ca4a24686e61301152305f, type: 3}
+  - {fileID: 21300000, guid: 46a1ecc7c60c42b48bf038a2480fbf04, type: 3}
